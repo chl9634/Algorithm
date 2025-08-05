@@ -28,18 +28,19 @@ int main() {
             {
                 for (int q = 0; q < 8; q++) 
                 {
-                    char current = board[i + p][j + q];
+                    char point = board[i + p][j + q];
                     if ((p + q) % 2 == 0) 
                     {
-                        if (current != 'W') 
+                        if (point != 'W') 
                             p1++;
-                        if (current != 'B') 
+                        if (point != 'B') 
                             p2++;
-                    } else 
+                    } 
+                    else 
                     {
-                        if (current != 'B') 
+                        if (point != 'B') 
                             p1++;
-                        if (current != 'W') 
+                        if (point != 'W') 
                             p2++;
                     }
                 }
@@ -51,4 +52,5 @@ int main() {
     }
     cout << minCount << '\n';
     return 0;
+
 }
