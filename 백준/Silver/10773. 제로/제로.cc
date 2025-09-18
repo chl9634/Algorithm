@@ -25,7 +25,7 @@ void inputFunc(int K)
 long long sum() 
 {
     long long sum = 0;
-    while (!stack_zero.empty()) 
+    for (int i = 0; i < stack_zero.size(); i++)
     {
         sum += stack_zero.top();
         stack_zero.pop();
@@ -46,4 +46,5 @@ int main() {
     cout << sum() << "\n";
 
     return 0;
+
 }
