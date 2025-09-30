@@ -1,0 +1,27 @@
+#include <iostream>
+using namespace std;
+
+int main() 
+{
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    long long N, M;
+    cin >> N >> M;
+    
+    for(long long i = 0; i < N; i++) 
+    {
+        long long A, B;
+        cin >> A >> B;
+    }
+    
+    for(long long i = 0; i < M; i++) 
+    {
+        long long C, D;
+        cin >> C >> D;
+    }
+    
+    int answer = (M - 3) / 2;
+    cout << answer << '\n';
+    return 0;
+}
