@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<pair<int, int>> ones;
+
+int question(int x, int y) 
+{
+    cout << "? " << x << " " << y << endl;
+    int input;
+    cin >> input;
+    if (input == -1) exit(0);
+    return input;
+}
+
+int main() 
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin >> N;
+    
+    if(N < 1 || N > 500) return 0;
+
+    for (int i = 1; i <= N; i++) 
+    {
+        for (int j = i + 1; j <= N; j++) 
+        {
+            int range = question(i, j);
+            if (range == 1)
+                ones.push_back({i, j});
+        }
+    }
+
+    cout << "! " << ones.size() << endl;
+    
+    for (int i = 0; i < ones.size(); i++) 
+    {
+        int u = ones[i].first;
+        int v = ones[i].second;
+        cout << u << " " << v << '\n';
+    }
+
+    return 0;
+}
