@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+int main() 
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int N;
+    cin >> N;
+    
+    if(N < 1 || N > 100000) return 0;
+
+    vector<int> vec;
+
+    for (int i = 0; i < N; i++) 
+    {
+        int x;
+        cin >> x;
+        
+        if(x < -10000 || x > 10000) return 0;
+
+        vec.insert(lower_bound(vec.begin(), vec.end(), x), x);
+
+        // 중앙값 출력
+        int middle = i / 2;
+        cout << vec[middle] << "\n";
+    }
+
+    return 0;
+}
