@@ -1,0 +1,155 @@
+
+백준 10026 적록색약
+
+제한사항
+
+시간제한 : 1초
+메모리 제한 : 128 MB
+
+문제요약
+N x N 그리드에 R,G,B가 입력될 때 적록색약이 아닌 사람과 맞는 사람의 구역의 개수 출력
+
+입력값
+N : 그리드 가로, 세로 칸의 개수
+R,G,B : 빨강, 초록, 파랑의 영역
+
+출력값
+적록색약이 아닌 사람이 본 영역의 갯수, 적록색약인 사람이 본 영역의 갯수
+
+제약조건
+N은 1보다 크거나 같고 100보다 작거나 같은 자연수
+R,G,B의 입력은 N x N의 입력 형태를 준수하며 총 합은 N의 제곱 수 만큼 입력되어야 함
+
+접근방법
+깊이우선탐색(DFS), 너비우선탐색(BFS)
+- BFS
+ Queue를 이용해 인접 노드를 차례로 방문하여 탐색
+ 반복문을 사용하여 직관적으로 코드를 파악 가능
+ 최단경로 문제, 연결 성분 개수 세기 등 문제에 활용
+ 큐에 너무 많은 노드가 저장되면 메모리 초과 위험
+ 가중치 있는 그래프에서 사용 불가
+
+- DFS
+ Stack을 이용한 한 방향으로의 깊은 탐색
+ 재귀함수와 백트래킹을 사용하여 간결하게 구현 가능
+ 모든 경로 탐색 문제 등에 활용
+ 깊은 트리의 경우 재귀 스택 오버플로우 위험
+ 최단 경로가 보장되지 않으므로 최소 문제에 부적합
+
+*시간복잡도, 공간복잡도는 O(N^2)로 동일
+ 
+구현계획
+- 사용 언어 : C++
+
+- 코드 구조
+ 변수           타입                    내용
+ grid           vector<vector<char>>    일반인 색상 격자
+ grid_disable   vector<vector<char>>    적록색약 격자
+ visit          vector<vector<bool>>    일반인 방문 여부
+ visit_disable  vector<vector<bool>>    적록색약 방문 여부
+
+
+ 함수
+ bfs()
+  매개변수 : 그리드의 x,y , 그리드 벡터, 방문여부 벡터, 그리드 열 개수 N(최소 최대 제한 용도)
+ main()
+
+
+소스코드
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+void bfs(int Y, int X, vector<vector<char>>& grid, vector<vector<bool>>& visit, int N)
+{
+    queue<pair<int, int>> node;
+    node.push({Y, X});
+    visit[Y][X] = true;
+    char target = grid[Y][X]; 
+
+    while (!node.empty())
+    {
+        auto [y, x] = node.front();
+        node.pop();
+       
+        vector<pair<int, int>> find =
+        {
+            {-1,0}, 
+            {1,0}, 
+            {0,-1}, 
+            {0,1}
+        };
+        for (auto [move_y, move_x] : find)
+        {
+            int new_y = y + move_y;
+            int new_x = x + move_x;
+            if (new_y >= 0 && new_y < N && new_x >= 0 && new_x < N &&
+                grid[new_y][new_x] == target && !visit[new_y][new_x])
+            {
+                visit[new_y][new_x] = true;
+                node.push({new_y, new_x});
+            }
+        }
+    }
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin >> N;
+
+    vector<vector<char>> grid(N, vector<char>(N));
+    for (int i = 0; i < N; i++) 
+    {
+        string str; 
+        cin >> str;
+        for (int j = 0; j < N; ++j) 
+            grid[i][j] = str[j];
+    }
+
+    vector<vector<bool>> visit(N, vector<bool>(N, false));
+    int count_normal = 0;
+
+    for (int y = 0; y < N; y++) 
+    {
+        for (int x = 0; x < N; x++) 
+        {
+            if (grid[y][x] != 0 && !visit[y][x]) 
+            {
+                bfs(y, x, grid, visit, N);
+                count_normal++;
+            }
+        }
+    }
+
+    vector<vector<char>> grid_disable = grid; 
+    for (int i = 0; i < N; i++) 
+    {
+        for (int j = 0; j < N; j++) 
+        {
+            if (grid_disable[i][j] == 'G') 
+                grid_disable[i][j] = 'R';
+        }
+    }
+
+    vector<vector<bool>> visit_disable(N, vector<bool>(N, false));
+    int count_disable = 0;
+
+    for (int y = 0; y < N; y++) 
+    {
+        for (int x = 0; x < N; x++) {
+            if (grid_disable[y][x] != 0 && !visit_disable[y][x]) 
+            {
+                bfs(y, x, grid_disable, visit_disable, N);
+                count_disable++;
+            }
+        }
+    }
+
+    cout << count_normal << ' ' << count_disable << '\n';
+    return 0;
+}
