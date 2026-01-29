@@ -1,0 +1,64 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+
+int main() 
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N, K;
+    cin >> N >> K;
+
+    vector<pair<int, int>> jewel(N);
+    vector<int> bag(K);
+    
+    for (int i = 0; i < N; i++) 
+    {
+        cin >> jewel[i].first >> jewel[i].second;
+    }
+
+    for (int i = 0; i < K; i++) 
+    {
+        cin >> bag[i];
+    }
+    
+    sort(jewel.begin(), jewel.end());
+    sort(bag.begin(), bag.end());
+
+    vector<bool> input(N, false);
+    int answer = 0;
+
+    for (int i = 0; i < K; i++) 
+    {
+        int now_bag = bag[i];
+
+        int idx = -1;
+        int value = -1;
+
+        for (int j = 0; j < N; j++) 
+        {
+            if (input[j]) 
+                continue;
+            if (jewel[j].first > now_bag) 
+                break;
+            if (jewel[j].second > value) 
+            {
+                value = jewel[j].second;
+                idx = j;
+            }
+        }
+
+        if (idx != -1) 
+        {
+            input[idx] = true;
+            answer += value;
+        }
+    }
+    cout << answer << "\n";
+    return 0;
+}
